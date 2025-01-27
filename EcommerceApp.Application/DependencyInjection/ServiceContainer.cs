@@ -1,5 +1,5 @@
 ﻿using EcommerceApp.Application.Services.Implementations;
-using EcommerceApp.Domain.Services;
+using EcommerceApp.Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EcommerceApp.Application.DependencyInjection

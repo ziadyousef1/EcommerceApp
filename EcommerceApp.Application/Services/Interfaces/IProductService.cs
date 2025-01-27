@@ -1,7 +1,7 @@
 ﻿using EcommerceApp.Application.DTOs;
 using EcommerceApp.Application.DTOs.Product;
 
-namespace EcommerceApp.Domain.Services
+namespace EcommerceApp.Application.Services.Interfaces
 {
     public interface IProductService
     {

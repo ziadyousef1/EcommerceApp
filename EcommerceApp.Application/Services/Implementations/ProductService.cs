@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using EcommerceApp.Application.DTOs;
 using EcommerceApp.Application.DTOs.Product;
+using EcommerceApp.Application.Services.Interfaces;
 using EcommerceApp.Domain.Entities;
 using EcommerceApp.Domain.Interfaces;
-using EcommerceApp.Domain.Services;
 
 namespace EcommerceApp.Application.Services.Implementations
 {
-    public class ProductService(IGeneric<Product> productRepository,IMapper mapper) : IProductService
+    public class ProductService(IGeneric<Product> productRepository, IMapper mapper) : IProductService
     {
         public async Task<ServiceResponse> AddAsync(CreateProduct product)
         {
@@ -20,13 +20,14 @@ namespace EcommerceApp.Application.Services.Implementations
         public async Task<ServiceResponse> DeleteAsync(Guid id)
         {
             var result = await productRepository.DeleteAsync(id);
-            return result > 0 ?  new ServiceResponse("product deleted",true)
-                           : new ServiceResponse("product failed to be deleted",false);
+            return result > 0 ?
+                new ServiceResponse("product not found or failed to be deleted", false):
+              new ServiceResponse("product deleted", true); 
         }
 
         public async Task<List<GetProduct>> GetAllAsync()
         {
-            var data =await productRepository.GetAllAsync();
+            var data = await productRepository.GetAllAsync();
             if (data.Count == 0)
                 return [];
             return mapper.Map<List<GetProduct>>(data);
@@ -37,7 +38,7 @@ namespace EcommerceApp.Application.Services.Implementations
         {
             var data = await productRepository.GetByIdAsync(id);
             if (data is null) return new GetProduct();
-            
+
             return mapper.Map<GetProduct>(data);
 
         }
