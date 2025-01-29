@@ -1,5 +1,7 @@
 
 
+using EcommerceApp.Presentation;
+
 var builder = WebApplication.CreateBuilder(args);
 
 Log.Logger = new LoggerConfiguration()
@@ -14,8 +16,21 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationService();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddCors(builder =>
+{
+    builder.AddDefaultPolicy(options =>
+    {
+        options.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowAnyOrigin()
+            .AllowCredentials();
 
+    });
+
+});
 var app = builder.Build();
+
 
 if (app.Environment.IsDevelopment())
 {
