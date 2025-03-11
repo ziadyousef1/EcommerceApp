@@ -14,5 +14,6 @@ namespace EcommerceApp.Application.DTOs.Product
 
         public Guid Id { get; set; }
         public GetCategory? Category { get; set; }
+
     }
 }

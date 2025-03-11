@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
 using EcommerceApp.Application.DTOs;
 using EcommerceApp.Application.DTOs.Category;
+using EcommerceApp.Application.DTOs.Product;
 using EcommerceApp.Application.Services.Interfaces;
 using EcommerceApp.Domain.Entities;
 using EcommerceApp.Domain.Interfaces;
+using EcommerceApp.Domain.Interfaces.Category;
 
 namespace EcommerceApp.Application.Services.Implementations
 {
-    public class CategoryService(IGeneric<Category> categoryRepository, IMapper mapper) : ICategoryService
+    public class CategoryService(IGeneric<Category> categoryRepository, IMapper mapper,ICategory category) : ICategoryService
     {
         public async Task<ServiceResponse> AddAsync(CreateCategory category)
         {
@@ -38,6 +40,15 @@ namespace EcommerceApp.Application.Services.Implementations
             if (data is null) return new GetCategory();
 
             return mapper.Map<GetCategory>(data);
+        }
+
+        public async Task<IEnumerable<GetProduct>> GetProductsByCategory(Guid categoryId)
+        {
+            var products = await category.GetProductsByCategory(categoryId);
+            if (!products.Any())
+                return [];
+            
+            return mapper.Map<IEnumerable<GetProduct>>(products);
         }
 
         public async Task<ServiceResponse> UpdateAsync(UpdateCategory category)

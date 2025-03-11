@@ -2,9 +2,11 @@
 using EcommerceApp.Domain.Entities;
 using EcommerceApp.Domain.Entities.Identity;
 using EcommerceApp.Domain.Interfaces;
+using EcommerceApp.Domain.Interfaces.Authentication;
 using EcommerceApp.Infrastructure.Data;
 using EcommerceApp.Infrastructure.middleware;
 using EcommerceApp.Infrastructure.Repositories;
+using EcommerceApp.Infrastructure.Repositories.Authentication;
 using EcommerceApp.Infrastructure.Services;
 using EcommerceApp.Infrastructure.Settings;
 using EntityFramework.Exceptions.SqlServer;
@@ -18,6 +20,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
+using EcommerceApp.Application.Services.Interfaces.Cart;
+using EcommerceApp.Domain.Interfaces.Cart;
+using EcommerceApp.Infrastructure.Repositories.Cart;
+using EcommerceApp.Domain.Interfaces.Category;
+using EcommerceApp.Infrastructure.Repositories.Category;
 
 namespace EcommerceApp.Infrastructure.DependencyInjection
 {
@@ -66,9 +73,16 @@ namespace EcommerceApp.Infrastructure.DependencyInjection
 
                 };
 
+               
             }
             );
-
+            services.AddScoped<IUserManagement, UserManagement>();
+            services.AddScoped<ITokenManagement, TokenManagement>();
+            services.AddScoped<IRoleManagement, RoleManagement>();
+            services.AddScoped<IPaymentMethod, PaymentMethodRepository>();
+            services.AddScoped<IPaymentService, StripePaymentService>();
+            services.AddScoped<ICategory, CategoryRepository>();
+            Stripe.StripeConfiguration.ApiKey = configuration.GetSection("StripeSettings:SecretKey").Value;
             return services;
         }
         public static IApplicationBuilder UseInfrastructureService(this IApplicationBuilder app)
