@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using EcommerceApp.Application.DTOs.Product;
 using EcommerceApp.Application.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcommerceApp.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ProductController(IProductService productService) : ControllerBase
+    public class ProductController(IProductService productService,ICategoryService categoryService) : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -25,6 +26,7 @@ namespace EcommerceApp.Presentation.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddAsync([FromBody] CreateProduct product)
         {
             if (!ModelState.IsValid)
@@ -33,11 +35,11 @@ namespace EcommerceApp.Presentation.Controllers
             var response = await productService.AddAsync(product);
             if (response.IsSuccess)
                 return Ok(response);
-            else
-                return BadRequest(response.Message);
+            return BadRequest(response.Message);
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateAsync([FromBody] UpdateProduct product)
         {
             if (!ModelState.IsValid)
@@ -51,6 +53,7 @@ namespace EcommerceApp.Presentation.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var response = await productService.DeleteAsync(id);
@@ -58,6 +61,15 @@ namespace EcommerceApp.Presentation.Controllers
                 return NoContent();
             else
                 return NotFound(response.Message);
+        }
+
+        [HttpGet("productsByCategory/{categoryId}")]
+        public async Task<IActionResult> GetProductsByCategory(Guid categoryId)
+        {
+
+            var products = await categoryService.GetProductsByCategory(categoryId);
+            
+            return products.Any() ? Ok(products) : NotFound();
         }
     }
 }

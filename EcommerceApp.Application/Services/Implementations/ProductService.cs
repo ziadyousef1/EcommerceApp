@@ -11,6 +11,7 @@ namespace EcommerceApp.Application.Services.Implementations
     {
         public async Task<ServiceResponse> AddAsync(CreateProduct product)
         {
+           
             var mappedProduct = mapper.Map<Product>(product);
             var result = await productRepository.AddAsync(mappedProduct);
             return result > 0 ? new ServiceResponse("product added", true)

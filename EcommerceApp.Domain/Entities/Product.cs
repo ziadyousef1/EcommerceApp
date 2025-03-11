@@ -7,6 +7,7 @@ namespace EcommerceApp.Domain.Entities
     {
         [Key]
         public Guid Id { get; set; }
+        [Required]
         public string? Name { get; set; }
         public string? Description { get; set; }
         [Column(TypeName = "decimal(18,2)")]

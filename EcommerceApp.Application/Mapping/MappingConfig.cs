@@ -1,7 +1,11 @@
 ﻿using AutoMapper;
+using EcommerceApp.Application.DTOs.Cart;
 using EcommerceApp.Application.DTOs.Category;
+using EcommerceApp.Application.DTOs.Identity;
 using EcommerceApp.Application.DTOs.Product;
 using EcommerceApp.Domain.Entities;
+using EcommerceApp.Domain.Entities.Cart;
+using EcommerceApp.Domain.Entities.Identity;
 
 namespace EcommerceApp.Application.Mapping
 {
@@ -17,6 +21,13 @@ namespace EcommerceApp.Application.Mapping
 
             CreateMap<UpdateProduct, Product>();
             CreateMap<UpdateCategory, Category>();
+            CreateMap<CreateUser, AppUser>();
+            CreateMap<AppUser, CreateUser>();
+            CreateMap<LoginUser, AppUser>();
+            CreateMap<AppUser, LoginUser>();
+            
+            CreateMap<PaymentMethod,GetPaymentMethod>();
+            CreateMap<CreateCartItem, CartItem>();
 
         }
     }
